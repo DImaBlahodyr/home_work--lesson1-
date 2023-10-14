@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 2</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        background-color: #405468;
+        font-size: 20px;
+        font-family: 'Times New Roman', Times, serif;
+      }
+      .header {
+        max-width: 1425px;
+        margin: 0 auto;
+        background-color: #00bd82;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 30px;
+      }
+      .header > p {
+        font-size: 24px;
+      }
+      .content {
+        max-width: 600px;
+        margin: 10px auto;
+        background-color: #00bd82;
+        border-radius: 10px;
+        text-align: center;
+        padding: 5px 0;
+        font-size: 24px;
+      }
+      .btn {
+        max-width: 300px;
+        margin: 30px auto;
+      }
+      .button {
+        display: block;
+        text-decoration: none;
+        color: black;
+        background-color: #405468;
+        margin: 15px 25px;
+        text-align: center;
+        font-size: 22px;
+        padding: 10px 20px;
+        border-radius: 7px;
+      }
+      .button:hover {
+        background-color: lightgrey;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div>Задача 2</div>
+      <p>
+        Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….). Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).
+      </p>
+    </div>
+    <div class="content">
+      <p>Відповідь до задачі:</p>
+      <div id="app">
+        <div>
+          <label>
+            Введіть номер місяця
+            <input type="number" v-model="monthNumber" />
+          </label>
+        </div>
+        <div>
+          <label> Пора року: <span>{{findSeason}}</span> </label>
+        </div>
+        <div>
+          <label>Необхідний одяг: <span>{{findClothes}}</span></label>
+        </div>
+        <div><img :src="findImage" alt="" width="400" /></div>
+      </div>
+  
+      <script>
+        const { createApp } = Vue
+  
+        const seasons = ['Зима', 'Весна', 'Літо', 'Осінь']
+        const clothingList = [
+          'Пальто',
+          'Легка куртка',
+          'Шорти та футболка',
+          'Осіння куртка',
+        ]
+  
+        const imageList = [
+          'home_work (lesson1)/img1.jpg',
+          'home_work (lesson1)/img2.jpg',
+          'home_work (lesson1)/img3.jpg',
+          'home_work (lesson1)/img4.jpg',
+        ]
+  
+        const app = createApp({
+          data() {
+            return {
+              monthNumber: null,
+            }
+          },
+  
+          computed: {
+            findSeason() {
+              switch (this.monthNumber) {
+                case 12:
+                case 1:
+                case 2:
+                  return seasons[0]
+                  break
+                case 3:
+                case 4:
+                case 5:
+                  return seasons[1]
+                  break
+                case 6:
+                case 7:
+                case 8:
+                  return seasons[2]
+                  break
+                case 9:
+                case 10:
+                case 11:
+                  return seasons[3]
+                  break
+              }
+            },
+  
+            findClothes() {
+              switch (this.monthNumber) {
+                case 12:
+                case 1:
+                case 2:
+                  return clothingList[0]
+                  break
+                case 3:
+                case 4:
+                case 5:
+                  return clothingList[1]
+                  break
+                case 6:
+                case 7:
+                case 8:
+                  return clothingList[2]
+                  break
+                case 9:
+                case 10:
+                case 11:
+                  return clothingList[3]
+                  break
+              }
+            },
+            findImage() {
+              switch (this.monthNumber) {
+                case 12:
+                case 1:
+                case 2:
+                  return imageList[0]
+                  break
+                case 3:
+                case 4:
+                case 5:
+                  return imageList[1]
+                  break
+                case 6:
+                case 7:
+                case 8:
+                  return imageList[2]
+                  break
+                case 9:
+                case 10:
+                case 11:
+                  return imageList[3]
+                  break
+              }
+            },
+          },
+        }).mount('#app')
+      </script>
+       <div class="btn">
+        <a class="button" href="./index.html">На головну</a>
+      </div>
+  </body>
+</html>

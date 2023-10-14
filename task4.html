@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 4</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        background-color: #405468;
+        font-size: 20px;
+        font-family: 'Times New Roman', Times, serif;
+      }
+      .header {
+        max-width: 1425px;
+        margin: 0 auto;
+        background-color: #00bd82;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 30px;
+      }
+      .header > p {
+        font-size: 24px;
+      }
+      .content {
+        max-width: 600px;
+        margin: 10px auto;
+        background-color: #00bd82;
+        border-radius: 10px;
+        text-align: center;
+        padding: 5px 0;
+        font-size: 24px;
+      }
+      .btn {
+        max-width: 300px;
+        margin: 30px auto;
+      }
+      .button {
+        display: block;
+        text-decoration: none;
+        color: black;
+        background-color: #405468;
+        margin: 15px 25px;
+        text-align: center;
+        font-size: 22px;
+        padding: 10px 20px;
+        border-radius: 7px;
+      }
+      .button:hover {
+        background-color: lightgrey;
+      }
+
+
+      .replenishmentOperation {
+        background-color: green;
+      }
+
+      .withdrawalOperation {
+        background-color: red;
+      }
+
+      .highCurrencyBalance {
+        background-color: green;
+      }
+
+      .lowCurrencyBalance {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div>Задача 4</div>
+      <p>
+        “Рахунок у банку” <br>
+Вимоги: <br>
+1 Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або зняттям.<br>
+2 Сума автоматично переводиться у долари та євро (фіксований курс задається у data).<br>
+3 можливість зарахувати суму (контролювати, щоб не була від’ємною)<br>
+4 можливість зняти (щоб не можна зняти більше ніж є на рахунку)<br>
+5 при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків автоматично)<br>
+
+При зміні суми :<br>
+- якщо було зняття, то суму відоражати червоним<br>
+- якщо було зарахування, то суму відображати зеленим<br>
+Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим<br>
+
+      </p>
+    </div>
+    <div class="content">
+      <p>Відповідь до задачі:</p>
+      <div id="app">
+        <div>
+          <label>
+            Сума на рахунку:
+            <span>{{grnBalance}}</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            Зарахувати на рахунок:
+            <input type="number" v-model="enrollmentAmount" />
+            <button @click="getBalanceAfterEnrollment">Зарахувати</button>
+          </label>
+        </div>
+        <div>
+          <label>
+            Зняти з рахунку:
+            <input type="number" v-model="withdrawalAmont" />
+            <button @click="getBalanceAfterWithdrowal">Зняти</button>
+          </label>
+        </div>
+        <div>
+          <label> Відсотки за обслуговування: <span>{{commission}}</span> </label>
+        </div>
+        <hr />
+        <div>
+          <label>
+            Баланс у долларах:
+            <span :class="controlDollarBalance">{{getDollarBalance}}</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            Баланс у євро:
+            <span :class="controlEuroBalance">{{getEuroBalance}}</span>
+          </label>
+        </div>
+        <div>{{message}}</div>
+      </div>
+  
+      <script>
+        const { createApp } = Vue
+  
+        const app = createApp({
+          data() {
+            return {
+              grnBalance: null,
+              dollarBalance: null,
+              euroBalance: null,
+              enrollmentAmount: null,
+              withdrawalAmont: null,
+              commission: null,
+              dollarRate: 36,
+              euroRate: 38,
+              message: null,
+            }
+          },
+  
+          computed: {
+            getDollarBalance() {
+              return (this.dollarBalance =
+                this.grnBalance / this.dollarRate).toFixed(2)
+            },
+            getEuroBalance() {
+              return (this.euroBalance = this.grnBalance / this.euroRate).toFixed(
+                2
+              )
+            },
+            controlDollarBalance() {
+              let result
+              if (this.dollarBalance >= 100) {
+                result = 'highCurrencyBalance'
+              } else result = 'lowCurrencyBalance'
+              return result
+            },
+            controlEuroBalance() {
+              let result
+              if (this.euroBalance >= 100) {
+                result = 'highCurrencyBalance'
+              } else result = 'lowCurrencyBalance'
+              return result
+            },
+          },
+  
+          methods: {
+            getBalanceAfterEnrollment() {
+              if (this.enrollmentAmount > 0) {
+                this.commission = this.enrollmentAmount * 0.03
+                this.grnBalance += this.enrollmentAmount - this.commission
+                this.message = null
+                this.enrollmentAmount = null
+              } else this.message = "Сума поповнення не може бути від'ємною"
+            },
+            getBalanceAfterWithdrowal() {
+              this.commission = this.withdrawalAmont * 0.03
+              let controlValue = this.withdrawalAmont - this.commission
+              if (this.grnBalance < controlValue) {
+                this.message = 'Недостатньо коштів'
+                return
+              }
+              this.grnBalance -= controlValue
+              this.withdrawalAmont = null
+            },
+          },
+        }).mount('#app')
+      </script>
+       <div class="btn">
+        <a class="button" href="./index.html">На головну</a>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 5</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        background-color: #405468;
+        font-size: 20px;
+        font-family: 'Times New Roman', Times, serif;
+      }
+      .header {
+        max-width: 1425px;
+        margin: 0 auto;
+        background-color: #00bd82;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 30px;
+      }
+      .header > p {
+        font-size: 24px;
+      }
+      .content {
+        max-width: 600px;
+        margin: 10px auto;
+        background-color: #00bd82;
+        border-radius: 10px;
+        text-align: center;
+        padding: 5px 0;
+        font-size: 24px;
+      }
+      .btn {
+        max-width: 300px;
+        margin: 30px auto;
+      }
+      .button {
+        display: block;
+        text-decoration: none;
+        color: black;
+        background-color: #405468;
+        margin: 15px 25px;
+        text-align: center;
+        font-size: 22px;
+        padding: 10px 20px;
+        border-radius: 7px;
+      }
+      .button:hover {
+        background-color: lightgrey;
+      }
+
+
+     
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div>Задача 5</div>
+      <p>
+        Додаток містить масив об’єктів (логін, пароль) --  інсуючи логіни і паролі. Користувач вводить логін і пароль, а програма повідомляє чи може користувач бути авторизованим.
+      </p>
+    </div>
+    <div class="content">
+      <p>Відповідь до задачі:</p>
+      <div id="app">
+        <div>
+          <label
+            >Login:
+            <input type="text" v-model="userLogin" />
+          </label>
+        </div>
+        <div>
+          <label
+            >Password:
+            <input type="password" v-model="userPassword" />
+          </label>
+        </div>
+        <div><button @click="userVerification">Go</button></div>
+        <div><span>{{message}}</span></div>
+      </div>
+  
+      <script>
+        const { createApp } = Vue
+  
+        const userList = [
+          { login: 'user1', password: '1234' },
+          { login: 'user2', password: '5678' },
+          { login: 'user3', password: '9012' },
+        ]
+  
+        const app = createApp({
+          data() {
+            return {
+              userLogin: null,
+              userPassword: null,
+              message: null,
+            }
+          },
+  
+          methods: {
+            userVerification() {
+              const toLowerCaseLogin = this.userLogin.toLowerCase()
+              let check = userList.find(
+                (el) =>
+                  el.login.toLowerCase() === toLowerCaseLogin &&
+                  el.password === this.userPassword
+              )
+              if (check) this.message = 'Вітаємо'
+              else this.message = 'Невiрний логiн або пароль'
+              this.userLogin = null
+              this.userPassword = null
+            },
+          },
+        }).mount('#app')
+      </script>
+       <div class="btn">
+        <a class="button" href="./index.html">На головну</a>
+      </div>
+  </body>
+</html>
